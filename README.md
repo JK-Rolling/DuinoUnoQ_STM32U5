@@ -4,11 +4,10 @@ High-performance SHA1 mining for Arduino UNO Q with STM32U5 (ARM Cortex-M33).
 
 ## Performance
 
-| Metric | Value |
-|--------|-------|
-| **Hashrate** | ~106,000 H/s |
-| **CPU** | STM32U585 @ 160 MHz |
-| **Architecture** | ARM Cortex-M33 |
+| CPU Model | Architecture | Clock Speed | Hashrate | Tested By | Notes |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| STM32U585 (USB&nbsp;Dev&nbsp;Board) | ARM Cortex&#8209;M33 | 160 MHz | ~106,000&nbsp;H/s | JK&#8209;Rolling | None |
+| STM32U585 (Arduino&nbsp;Uno&nbsp;Q) | ARM Cortex&#8209;M33 | 160 MHz | ~110,000&nbsp;H/s | Eisberg | Probably a bit faster due to skipping the USB converter and having direct PCB connection to the CPU |
 
 ## Optimizations Applied
 
