@@ -6,24 +6,7 @@ High-performance SHA1 mining for Arduino UNO Q with STM32U5 (ARM Cortex-M33).
 
 | CPU Model | Architecture | Clock Speed | Hashrate | Tested By | Notes |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| STM32U585 (USB&nbsp;Dev&nbsp;Board) | ARM Cortex&#8209;M33 | 160 MHz | ~106,000&nbsp;H/s | JK&#8209;Rolling | None |
-| STM32U585 (Arduino&nbsp;Uno&nbsp;Q) | ARM Cortex&#8209;M33 | 160 MHz | ~110,000&nbsp;H/s | Eisberg | Probably a bit faster due to skipping the USB converter and having direct PCB connection to the CPU |
-
-## Optimizations Applied
-
-1. **Direct Block SHA1** - Bypasses all SHA1 context management overhead
-2. **ARM Intrinsics** - Single-cycle `__ROR()` and `__REV()` instructions
-3. **Incremental Nonce** - O(1) amortized nonce string updates
-4. **XOR-OR Comparison** - Single branch instead of 5 conditional checks
-5. **Pre-computed Lookup Tables** - Fast hex-to-byte conversion
-
-## Files
-
-| File | Description |
-|------|-------------|
-| `main.cpp` | Optimized mining function with Bridge integration |
-| `sha1.h` | ARM Cortex-M33 optimized SHA1 implementation |
-| `main.py` | PC-side mining script (communicates with board) |
+| STM32U585 (Arduino&nbsp;Uno&nbsp;Q) | ARM Cortex&#8209;M33 | 160 MHz | ~1,036,000&nbsp;H/s | Eisberg | |
 
 
 ## How It Works
@@ -44,6 +27,12 @@ High-performance SHA1 mining for Arduino UNO Q with STM32U5 (ARM Cortex-M33).
 
 The PC handles network communication with the Duino-Coin pool, while the STM32U5 performs the compute-intensive SHA1 mining.
 
+### STM32U5 Hardware Hasher
+
+Raw performance of the hasher is 82 cycles per 512-bits block, this translates into 1.95MH/s at 160MHz HCLK. Without considering overhead.
+
+CycloneCrypto managed to get throughput of 74.626MB/s or 1.6MH/s. But that's not how Duco algo works where CPU need to check nonce from each digest, so just fyi.
+
 ### Mining Algorithm
 
 ```
@@ -53,22 +42,12 @@ For each nonce from 0 to (difficulty × 100):
         return nonce
 ```
 
-### Key Optimization: Direct Block SHA1
-
-Instead of using SHA1 context management (Init → Update → Final), we:
-
-1. Pre-build a 64-byte block with lastHash + padding
-2. Insert nonce digits directly into the block
-3. Call SHA1Transform once (no context overhead)
-
-This eliminates ~40% of per-hash overhead.
-
 ## Performance Comparison
 
 | Implementation | Hashrate | Improvement |
 |----------------|----------|-------------|
 | Original (context-based) | ~32,000 H/s | baseline |
-| Optimized (direct block) | ~106,000 H/s | **+331%** |
+| Optimized (direct block) | ~1,036,000 H/s | **+3200%** |
 
 ## Author
 

@@ -1,0 +1,6 @@
+name: "Arduino Uno Q - STM32 HASH Miner"
+description: A high-performance Duino-Coin (DUCO) miner for the Arduino Uno Q. By bypassing software libraries and interfacing directly with the STM32U585 hardware HASH accelerator via CPU-silicon pipelining, this miner achieves a peak hashrate of ~830 kH/s—a 28x increase over standard implementation.
+ports:
+- 7000
+bricks: []
+icon: 🚀
